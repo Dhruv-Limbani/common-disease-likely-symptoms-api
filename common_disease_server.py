@@ -20,7 +20,7 @@ with open('model','rb') as f:
     model,diseases,sym_attrs = pickle.load(f)
 df = pd.read_csv('Prototype.csv')
 
-@app.post('/predict')
+@app.get('/predict')
 def predict(symptoms: list[str] = Query(...)):
     sym_indices = [np.where(sym_attrs==sym)[0][0] for sym in symptoms]
     x = np.zeros(len(sym_attrs))
@@ -29,7 +29,7 @@ def predict(symptoms: list[str] = Query(...)):
     pred = model.predict([x])[0]
     return diseases[pred]
 
-@app.post('/get_lksyms')
+@app.get('/get_lksyms')
 def get_likely_symptoms(sym_list: list[str] = Query(...)):
     syms = []
     for sym in sym_list:
